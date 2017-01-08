@@ -72,6 +72,7 @@ public class CommunicationService {
 	
 	public List<Message> readMessage(){
 		List<Message> messages=CHAT_SERVICES.get(getSelectedProtocol()).getMyMessages(getLoggedUser().getId());
+		System.out.println(messages.size()+" w communication");
 		//LOGGER.info("Loaded messages for <{}>", messages.size());
 		return messages;
 	}

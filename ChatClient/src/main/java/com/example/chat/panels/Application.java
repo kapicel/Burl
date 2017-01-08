@@ -136,12 +136,12 @@ public class Application extends JFrame implements ApplicationListener<MessagesE
 		pane.add(pane2, BorderLayout.CENTER);
 		pane.add(pane3, BorderLayout.SOUTH);
 
-		JFrame fr = new JFrame();
-		fr.setSize(400, 400);
-	    fr.setContentPane(pane);  
-	    fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-	    fr.setLocation(200, 200); 
-	    fr.setVisible(true);      
+		//JFrame fr = new JFrame();
+		this.setSize(400, 400);
+		this.setContentPane(pane);  
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+		this.setLocation(200, 200); 
+		this.setVisible(true);      
 		
 	}
 	

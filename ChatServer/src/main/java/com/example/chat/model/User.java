@@ -46,7 +46,7 @@ public class User {
 	public List<Message> readMessages(){
 		List<Message> mess=new ArrayList<>();
 		for(Message m:messages){
-			mess.add(m);
+			mess.add(m.clone());
 		}
 		//mess.addAll(messages);
 		/*System.out.println("mess"+ mess.size());
@@ -54,9 +54,7 @@ public class User {
 			System.out.println("mess"+ mess.get(0).getMessage());
 		System.out.println(messages.size());*/
 		//messages.clear();
-		messages = new ArrayList<>();
-		//System.out.println(mess.size());
-
+		messages.clear();
 		return mess;
 	}
 	

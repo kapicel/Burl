@@ -27,6 +27,7 @@ public class UserService implements IUserService {
 	public long login(String username) {
 		User user = new User(username);
 		users.put(user.getId(), user);
+		HessianList.add(user.getId());
 		LOGGER.debug("Zalogowano <{}>, <{}>", user.getId(), user.getUsername());
 		return user.getId();
 	}
@@ -44,13 +45,11 @@ public class UserService implements IUserService {
 		if(HessianList.contains(authorID)){
 			for(long id:HessianList){
 				users.get(id).newMessage(message);
-				users.get(id).readMessages().size();
 			}
 		}
 		else if(BurlapList.contains(authorID)){
 			for(long id:BurlapList){
 				users.get(id).newMessage(message);
-				users.get(id).readMessages().size();
 
 			}
 		}

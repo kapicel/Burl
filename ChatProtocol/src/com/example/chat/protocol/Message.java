@@ -21,10 +21,7 @@ public class Message implements Serializable {
 	}
 	
 	public Message clone(){
-		Message p = new Message();
-        p.mess = this.mess.clone();
-        p.author = this.author.clone();
+		return(new Message(this.mess, this.author));
        
-        return p;
     }
 }

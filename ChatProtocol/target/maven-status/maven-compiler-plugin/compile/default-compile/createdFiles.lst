@@ -1,0 +1,3 @@
+com\example\chat\protocol\IChatService.class
+com\example\chat\protocol\Protocol.class
+com\example\chat\protocol\Message.class
