@@ -19,7 +19,7 @@ public class User {
 	
 	private final long id;
 	private final String username;
-	private final List<Message> messages=new ArrayList<>();
+	private  List<Message> messages=new ArrayList<>();
 	
 	public User(String username){
 		long id;
@@ -44,7 +44,20 @@ public class User {
 	}
 	
 	public List<Message> readMessages(){
-		return messages;
+		List<Message> mess=new ArrayList<>();
+		for(Message m:messages){
+			mess.add(m);
+		}
+		//mess.addAll(messages);
+		/*System.out.println("mess"+ mess.size());
+		if(mess.size()>0)
+			System.out.println("mess"+ mess.get(0).getMessage());
+		System.out.println(messages.size());*/
+		//messages.clear();
+		messages = new ArrayList<>();
+		//System.out.println(mess.size());
+
+		return mess;
 	}
 	
 }

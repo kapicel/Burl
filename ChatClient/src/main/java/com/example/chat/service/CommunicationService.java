@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.tomcat.util.log.SystemLogHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class CommunicationService {
 	public void login(String username){
 		long userId=CHAT_SERVICES.get(getSelectedProtocol()).login(username);
 		Statics.setLoggedUser(new User(userId, username));
-		LOGGER.info("User <{}> logged in, his id <{}>", username, userId);
+		LOGGER.info("User <{}> logged in, his id <{}>", username, userId );
 	}
 	
 	public void logout(){
@@ -59,6 +60,11 @@ public class CommunicationService {
 		}
 	}
 	
+	public void change(){
+		CHAT_SERVICES.get(getSelectedProtocol()).changeTechnology(getLoggedUser().getId(), getSelectedProtocol());
+		LOGGER.info("Joining protocol <{}>");
+	}
+	
 	public void sendMessage(String messageText){
 		Message message=new Message(messageText, getLoggedUser().getUsername());
 		CHAT_SERVICES.get(getSelectedProtocol()).sendMessage(getLoggedUser().getId(),message);
@@ -66,6 +72,7 @@ public class CommunicationService {
 	
 	public List<Message> readMessage(){
 		List<Message> messages=CHAT_SERVICES.get(getSelectedProtocol()).getMyMessages(getLoggedUser().getId());
+		//LOGGER.info("Loaded messages for <{}>", messages.size());
 		return messages;
 	}
 }

@@ -14,6 +14,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
@@ -35,19 +36,20 @@ import com.example.chat.service.Statics;
 public class Application extends JFrame implements ApplicationListener<MessagesEvent>{
 
 	private final ApplicationEventPublisher publisher;
-	private final StringBuilder messagesBuilder;
+	private final StringBuilder burlapBuilder, hessianBuilder;
     private final CommunicationService communicationService;
 	
     @Autowired
 	public Application(ApplicationEventPublisher publisher, CommunicationService communicationService){
 		this.publisher = publisher;
-		this.messagesBuilder = new StringBuilder();
+		this.burlapBuilder = new StringBuilder();
+		this.hessianBuilder = new StringBuilder();
 		this.communicationService = communicationService;
 		initApp();
 	}
 	
 	JButton btn, login;
-	JTextArea  chatMessages;
+	JTextPane  chatMessages;
 	JScrollPane scroll;
 	JTextField message, username;
 	ButtonGroup btnGroup;
@@ -71,9 +73,9 @@ public class Application extends JFrame implements ApplicationListener<MessagesE
             }
 		});
 		//pole z wiadomosciami
-		chatMessages = new JTextArea();
-		chatMessages.setLineWrap(true);
-		chatMessages.setWrapStyleWord(true);
+		chatMessages = new JTextPane();
+		chatMessages.setFocusable(false);
+		chatMessages.setContentType("text/html");
 		chatMessages.setPreferredSize(new Dimension(250, 300));
 		scroll = new JScrollPane (chatMessages, 
 				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -153,15 +155,18 @@ public class Application extends JFrame implements ApplicationListener<MessagesE
 	
 	  //zmiana na burlap
 	  private void burlapRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_burlapRadioActionPerformed
-	      chatMessages.setText("burlap\n");  
 		  Statics.setSelectedProtocol(Protocol.BURLAP);
-	  }//GEN-LAST:event_burlapRadioActionPerformed
+		  communicationService.change();
+          chatMessages.setText("<html><body>" + burlapBuilder.toString() + "</html></body>");
+	  }
 
 	  //zmiana na hessian
 	  private void hessianRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hessianRadioActionPerformed
 		  chatMessages.setText("");    
 		  Statics.setSelectedProtocol(Protocol.HESSIAN);
-	  }//GEN-LAST:event_hessianRadioActionPerformed
+		  communicationService.change();
+          chatMessages.setText("<html><body>" + hessianBuilder.toString() + "</html></body>");
+	  }
 	  
 	  //akcja do wysylania widomosci
 	  private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
@@ -171,20 +176,21 @@ public class Application extends JFrame implements ApplicationListener<MessagesE
 	  
 	  private void sendMessage() {
 	        String mess = message.getText();
-	        message.setText("");
 	        communicationService.sendMessage(mess);
+	        message.setText("");
 	  }
 	  
 	  
-	  public void setText(List<Message> messages) {
+	/*  public void setText(List<Message> messages) {
 	        messages.stream().forEach((message) -> {
-	            updateMessages(message);
+	            updateMessages(message);      
 	            chatMessages.setText("<html><body>" + messagesBuilder.toString() + "</html></body>");
 	        });
-	    }
+	    }*/
 
-	    private void updateMessages(Message receivedMessage) {
+	    private void updateMessages(Message receivedMessage, StringBuilder messagesBuilder) {
 	        boolean myMessage = receivedMessage.getAuthor().equals(Statics.getLoggedUser().getUsername());
+	        System.out.println(receivedMessage.getMessage());
 	        if (myMessage) {
 	            messagesBuilder.append("<strong>");
 	        } else {
@@ -204,12 +210,18 @@ public class Application extends JFrame implements ApplicationListener<MessagesE
 	}
 	  
 	private void onMessageEvent(MessagesEvent evnt) {
-		chatMessages.setText("Myslales ze dziala?");
-		evnt.getMessages();
+		
+        //System.out.println("taki rozmiar: "+evnt.getMessages().size());
 		evnt.getMessages().stream().forEach((message) -> {
-			System.out.println(message.getMessage());
-	            updateMessages(message);
-	            chatMessages.setText("<html><body>" + messagesBuilder.toString() + "</html></body>");
+			System.out.println("jestemtu w srodku");
+			if(Statics.getSelectedProtocol()==Protocol.BURLAP){
+	            updateMessages(message,burlapBuilder);
+	            chatMessages.setText("<html><body>" + burlapBuilder.toString() + "</html></body>");
+			}
+			else{
+				updateMessages(message,hessianBuilder);
+	            chatMessages.setText("<html><body>" + hessianBuilder.toString() + "</html></body>");
+			}
 	        });
 	}
 

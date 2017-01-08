@@ -44,12 +44,18 @@ public class UserService implements IUserService {
 		if(HessianList.contains(authorID)){
 			for(long id:HessianList){
 				users.get(id).newMessage(message);
+				users.get(id).readMessages().size();
 			}
 		}
 		else if(BurlapList.contains(authorID)){
 			for(long id:BurlapList){
 				users.get(id).newMessage(message);
+				users.get(id).readMessages().size();
+
 			}
+		}
+		else{
+			System.out.println("jestem w userservice nigdzie :(");
 		}
 	}
 
@@ -70,17 +76,11 @@ public class UserService implements IUserService {
 	
 	@Override
 	public List<Message> readMessagesForUser(long userId) {
+		System.out.println("Nas jest tylu : "+users.get(userId).readMessages().size());
 		return users.get(userId).readMessages();
-}
+	}
 
 	
-/*	@Override
-	public Set<Long> findInactiveUsers(){
-		return users.entrySet()
-				.stream()
-				.filter(entry -> entry.getValue().isInactive())
-                .map(entry -> entry.getKey())
-                .collect(Collectors.toSet());
-	}*/
+
 
 }
